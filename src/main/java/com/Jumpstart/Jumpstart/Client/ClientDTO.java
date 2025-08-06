@@ -1,8 +1,10 @@
 package com.Jumpstart.Jumpstart.Client;
 
+import com.Jumpstart.Jumpstart.Club.ClubDTO;
 import lombok.Data;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class ClientDTO {
@@ -12,8 +14,9 @@ public class ClientDTO {
     private LocalDateTime createdAt;
     private String status;
     private String stripeAccountId;
+    private List<ClubDTO> clubs = new ArrayList<>();
 
-
+    // Getters and Setters
     public Integer getId() {
         return id;
     }
@@ -60,5 +63,13 @@ public class ClientDTO {
 
     public void setStripeAccountId(String stripeAccountId) {
         this.stripeAccountId = stripeAccountId;
+    }
+
+    public List<ClubDTO> getClubs() {
+        return clubs;
+    }
+
+    public void setClubs(List<ClubDTO> clubs) {
+        this.clubs = clubs;
     }
 }

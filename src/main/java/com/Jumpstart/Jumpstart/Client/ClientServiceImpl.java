@@ -65,4 +65,10 @@ public class ClientServiceImpl implements ClientService {
         dto.setStripeAccountId(client.getStripeAccountId());
         return dto;
     }
+
+
+    @Override
+    public Client getClientWithClubs(Integer id) {
+        return clientRepository.findByIdWithClubs(id);
+    }
 }

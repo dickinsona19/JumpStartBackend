@@ -19,7 +19,7 @@ CREATE TABLE membership (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL,
     price VARCHAR(50) NOT NULL,
-    chargeInterval VARCHAR(50) NOT NULL,
+    charge_interval VARCHAR(50) NOT NULL,
     promo_id INTEGER
 );
 
@@ -80,7 +80,7 @@ VALUES
     ('Summer Discount', 'percentage', '20', '3 months', 'SUMMER20'),
     ('Annual Promo', 'fixed', '50', '12 months', 'ANNUAL50');
 
-INSERT INTO membership (title, price, chargeInterval, promo_id)
+INSERT INTO membership (title, price, charge_interval, promo_id)
 VALUES
     ('Basic Plan', '29.99', 'monthly', NULL),
     ('Premium Plan', '59.99', 'monthly', 1),

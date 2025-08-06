@@ -61,4 +61,9 @@ public class ClientController {
             return password;
         }
     }
+
+    @GetMapping("/clientAll/{id}")
+    public Client getClient(@PathVariable Integer id) {
+        return clientService.getClientWithClubs(id);
+    }
 }

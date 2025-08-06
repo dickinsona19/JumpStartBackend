@@ -3,6 +3,7 @@ package com.Jumpstart.Jumpstart.Club;
 import com.Jumpstart.Jumpstart.Client.Client;
 import com.Jumpstart.Jumpstart.Membership.Membership;
 import com.Jumpstart.Jumpstart.Staff.Staff;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,6 +39,7 @@ public class Club {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
+    @JsonBackReference
     private Client client;
 
     @ManyToOne

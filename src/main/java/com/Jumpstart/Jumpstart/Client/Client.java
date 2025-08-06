@@ -1,9 +1,12 @@
 package com.Jumpstart.Jumpstart.Client;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import com.Jumpstart.Jumpstart.Club.Club;
 
 @Entity
 @Table(name = "clients")
@@ -30,7 +33,11 @@ public class Client {
     @Column
     private String stripeAccountId;
 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Club> clubs = new ArrayList<>();
 
+    // Getters and Setters
     public Integer getId() {
         return id;
     }
@@ -77,5 +84,13 @@ public class Client {
 
     public void setStripeAccountId(String stripeAccountId) {
         this.stripeAccountId = stripeAccountId;
+    }
+
+    public List<Club> getClubs() {
+        return clubs;
+    }
+
+    public void setClubs(List<Club> clubs) {
+        this.clubs = clubs;
     }
 }

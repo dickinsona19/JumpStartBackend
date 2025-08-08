@@ -16,11 +16,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**", "/api/clients", "/api/clients/login").permitAll() // Updated to /api/clients/login
+                        .requestMatchers("/h2-console/**", "/api/clients", "/api/clients/login", "api/users", "/api/memberships").permitAll() // Updated to /api/clients/login
                         .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**", "/api/clients/login") // Updated CSRF ignore
+                        .ignoringRequestMatchers("/h2-console/**", "/api/clients/login", "api/users", "/api/memberships") // Updated CSRF ignore
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .headers(headers -> headers

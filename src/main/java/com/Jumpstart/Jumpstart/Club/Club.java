@@ -1,5 +1,4 @@
 package com.Jumpstart.Jumpstart.Club;
-
 import com.Jumpstart.Jumpstart.Client.Client;
 import com.Jumpstart.Jumpstart.Membership.Membership;
 import com.Jumpstart.Jumpstart.Staff.Staff;
@@ -8,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "clubs")
@@ -22,19 +22,19 @@ public class Club {
     @Column
     private String title;
 
-    @Column
+    @Column(name = "logo_url")
     private String logoUrl;
 
     @Column
     private String status;
 
-    @Column
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column
+    @Column(name = "user_id")
     private Integer userId;
 
-    @Column
+    @Column(name = "club_tag")
     private String clubTag;
 
     @ManyToOne
@@ -46,10 +46,8 @@ public class Club {
     @JoinColumn(name = "staff_id")
     private Staff staff;
 
-    @ManyToOne
-    @JoinColumn(name = "membership_id")
-    private Membership membership;
-
+    @OneToMany(mappedBy = "club")
+    private List<Membership> memberships;
 
     public Integer getId() {
         return id;
@@ -75,8 +73,6 @@ public class Club {
         this.logoUrl = logoUrl;
     }
 
-
-
     public String getStatus() {
         return status;
     }
@@ -101,8 +97,6 @@ public class Club {
         this.userId = userId;
     }
 
-
-
     public String getClubTag() {
         return clubTag;
     }
@@ -110,7 +104,6 @@ public class Club {
     public void setClubTag(String clubTag) {
         this.clubTag = clubTag;
     }
-
 
     public Client getClient() {
         return client;
@@ -128,12 +121,11 @@ public class Club {
         this.staff = staff;
     }
 
-    public Membership getMembership() {
-        return membership;
+    public List<Membership> getMemberships() {
+        return memberships;
     }
 
-    public void setMembership(Membership membership) {
-        this.membership = membership;
+    public void setMemberships(List<Membership> memberships) {
+        this.memberships = memberships;
     }
-
 }

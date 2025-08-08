@@ -42,10 +42,10 @@ public class ClientController {
         return ResponseEntity.ok().build();
     }
     @PostMapping("/login")
-    public Client login(@RequestBody LoginRequest loginRequest) {
+    public ClientDTO login(@RequestBody LoginRequest loginRequest) {
         Optional<Client> client = clientRepository.findByEmail(loginRequest.email());
         if (client.isPresent() && client.get().getPassword().equals(loginRequest.password())) {
-            return client.get(); // Return the Client object if login is successful
+            return clientService.getClientWithClubs(client.get().getId()); // Return the Client object if login is successful
         } else {
             return null; // Return null for invalid credentials
         }
@@ -63,7 +63,7 @@ public class ClientController {
     }
 
     @GetMapping("/clientAll/{id}")
-    public Client getClient(@PathVariable Integer id) {
+    public ClientDTO getClient(@PathVariable Integer id) {
         return clientService.getClientWithClubs(id);
     }
 }

@@ -1,8 +1,14 @@
 package com.Jumpstart.Jumpstart.Club;
 
+import com.Jumpstart.Jumpstart.Membership.Membership;
+import com.Jumpstart.Jumpstart.Membership.MembershipDTO;
+import com.Jumpstart.Jumpstart.Membership.MembershipRepository;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class ClubDTO {
@@ -13,9 +19,45 @@ public class ClubDTO {
     private LocalDateTime createdAt;
     private Integer userId;
     private String clubTag;
-    private Integer clientId; // ID of the Client
-    private Integer staffId;  // ID of the Staff
-    private Integer membershipId; // ID of the Membership
+    private Integer clientId;
+    private Integer staffId;
+    private List<MembershipDTO> memberships;
+
+    @Autowired
+    private MembershipRepository membershipRepository;
+
+    public static ClubDTO mapToClubDTO(Club club) {
+        ClubDTO dto = new ClubDTO();
+        dto.setId(club.getId());
+        dto.setTitle(club.getTitle());
+        dto.setLogoUrl(club.getLogoUrl());
+        dto.setStatus(club.getStatus());
+        dto.setCreatedAt(club.getCreatedAt());
+        dto.setUserId(club.getUserId());
+        dto.setClubTag(club.getClubTag());
+        dto.setClientId(club.getClient() != null ? club.getClient().getId() : null);
+        dto.setStaffId(club.getStaff() != null ? club.getStaff().getId() : null);
+
+        // Fetch memberships by clubTag
+        List<Membership> memberships = club.getMemberships();
+        List<MembershipDTO> membershipDTOs = memberships.stream()
+                .map(membership -> dto.mapMembershipToDTO(membership))
+                .collect(Collectors.toList());
+        dto.setMemberships(membershipDTOs);
+
+        return dto;
+    }
+
+    private MembershipDTO mapMembershipToDTO(Membership membership) {
+        MembershipDTO dto = new MembershipDTO();
+        dto.setId(membership.getId());
+        dto.setTitle(membership.getTitle());
+        dto.setPrice(membership.getPrice());
+        dto.setChargeInterval(membership.getChargeInterval());
+        dto.setPromo(membership.getPromo() != null ? membership.getPromo() : null);
+        dto.setClubTag(membership.getClub() != null ? membership.getClub().getClubTag() : null);
+        return dto;
+    }
 
 
     public Integer getId() {
@@ -74,14 +116,6 @@ public class ClubDTO {
         this.userId = userId;
     }
 
-    public Integer getMembershipId() {
-        return membershipId;
-    }
-
-    public void setMembershipId(Integer membershipId) {
-        this.membershipId = membershipId;
-    }
-
     public String getClubTag() {
         return clubTag;
     }
@@ -96,5 +130,13 @@ public class ClubDTO {
 
     public void setStaffId(Integer staffId) {
         this.staffId = staffId;
+    }
+
+    public List<MembershipDTO> getMemberships() {
+        return memberships;
+    }
+
+    public void setMemberships(List<MembershipDTO> memberships) {
+        this.memberships = memberships;
     }
 }

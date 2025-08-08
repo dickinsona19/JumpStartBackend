@@ -1,5 +1,6 @@
 package com.Jumpstart.Jumpstart.User;
 
+import com.Jumpstart.Jumpstart.Membership.MembershipDTO;
 import lombok.Data;
 
 @Data
@@ -12,7 +13,7 @@ public class UserDTO {
     private String pictureURL;
     private String waiverSignature;
     private String status;
-    private Integer membershipId; // ID of the Membership
+    private MembershipDTO membership; // Membership details
     private String referralId;
     private String clubId;
     private String qrcodeToken;
@@ -24,7 +25,13 @@ public class UserDTO {
     public void setId(Integer id) {
         this.id = id;
     }
+    public MembershipDTO getMembership() {
+        return membership;
+    }
 
+    public void setMembership(MembershipDTO membership) {
+        this.membership = membership;
+    }
     public String getFirstName() {
         return firstName;
     }
@@ -81,13 +88,6 @@ public class UserDTO {
         this.status = status;
     }
 
-    public Integer getMembershipId() {
-        return membershipId;
-    }
-
-    public void setMembershipId(Integer membershipId) {
-        this.membershipId = membershipId;
-    }
 
     public String getReferralId() {
         return referralId;

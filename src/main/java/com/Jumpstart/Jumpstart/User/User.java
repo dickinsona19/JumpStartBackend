@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,34 +14,34 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column
+    @Column(name = "email")
     private String email;
 
-    @Column
+    @Column(name = "password")
     private String password;
 
-    @Column
+    @Column(name = "pictureURL")
     private String pictureURL;
 
-    @Column
+    @Column(name = "waiverSignature")
     private String waiverSignature;
 
-    @Column
+    @Column(name = "status")
     private String status;
 
-    @Column
+    @Column(name = "referral_id")
     private String referralId;
 
-    @Column
+    @Column(name = "club_id")
     private String clubId;
 
-    @Column
+    @Column(name = "qrcodeToken")
     private String qrcodeToken;
 
     @ManyToOne

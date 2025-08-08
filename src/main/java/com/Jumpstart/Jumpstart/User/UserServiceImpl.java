@@ -1,6 +1,7 @@
 package com.Jumpstart.Jumpstart.User;
 
 import com.Jumpstart.Jumpstart.Membership.Membership;
+import com.Jumpstart.Jumpstart.Membership.MembershipDTO;
 import com.Jumpstart.Jumpstart.Membership.MembershipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class UserServiceImpl implements UserService {
         user.setClubId(userDTO.getClubId());
         user.setQrcodeToken(userDTO.getQrcodeToken());
 
-        if (userDTO.getMembershipId() != null) {
-            Membership membership = membershipRepository.findById(userDTO.getMembershipId())
+        if (userDTO.getMembership() != null) {
+            Membership membership = membershipRepository.findById(userDTO.getMembership().getId())
                     .orElseThrow(() -> new RuntimeException("Membership not found"));
             user.setMembership(membership);
         }
@@ -53,7 +54,55 @@ public class UserServiceImpl implements UserService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<UserDTO> getUsersByClubId(String clubId) {
+        return userRepository.findByClubId(clubId).stream()
+                .map(user -> {
+                    UserDTO userDTO = new UserDTO();
+                    userDTO.setId(user.getId());
+                    userDTO.setFirstName(user.getFirstName());
+                    userDTO.setLastName(user.getLastName());
+                    userDTO.setEmail(user.getEmail());
+                    userDTO.setPassword(user.getPassword());
+                    userDTO.setPictureURL(user.getPictureURL());
+                    userDTO.setWaiverSignature(user.getWaiverSignature());
+                    userDTO.setStatus(user.getStatus());
+                    userDTO.setReferralId(user.getReferralId());
+                    userDTO.setClubId(user.getClubId());
+                    userDTO.setQrcodeToken(user.getQrcodeToken());
 
+                    // Map Membership to MembershipDTO
+                    if (user.getMembership() != null) {
+                        MembershipDTO membershipDTO = new MembershipDTO();
+                        membershipDTO.setId(user.getMembership().getId());
+                        membershipDTO.setTitle(user.getMembership().getTitle());
+                        membershipDTO.setPrice(user.getMembership().getPrice());
+                        membershipDTO.setChargeInterval(user.getMembership().getChargeInterval());
+                        membershipDTO.setPromo(user.getMembership().getPromo());
+                        userDTO.setMembership(membershipDTO);
+                    }
+
+                    return userDTO;
+                }).collect(Collectors.toList());
+    }
+    private UserDTO mapEntityToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setPictureURL(user.getPictureURL());
+        userDTO.setWaiverSignature(user.getWaiverSignature());
+        userDTO.setStatus(user.getStatus());
+        userDTO.setReferralId(user.getReferralId());
+        userDTO.setClubId(user.getClubId());
+        userDTO.setQrcodeToken(user.getQrcodeToken());
+        if (user.getMembership() != null) {
+            userDTO.setMembership(MembershipDTO.toMembershipDTO(user.getMembership()));
+        }
+        return userDTO;
+    }
     @Override
     public UserDTO updateUser(Integer id, UserDTO userDTO) {
         User user = userRepository.findById(id)
@@ -69,8 +118,8 @@ public class UserServiceImpl implements UserService {
         user.setClubId(userDTO.getClubId());
         user.setQrcodeToken(userDTO.getQrcodeToken());
 
-        if (userDTO.getMembershipId() != null) {
-            Membership membership = membershipRepository.findById(userDTO.getMembershipId())
+        if (userDTO.getMembership() != null) {
+            Membership membership = membershipRepository.findById(userDTO.getMembership().getId())
                     .orElseThrow(() -> new RuntimeException("Membership not found"));
             user.setMembership(membership);
         } else {
@@ -96,7 +145,7 @@ public class UserServiceImpl implements UserService {
         dto.setPictureURL(user.getPictureURL());
         dto.setWaiverSignature(user.getWaiverSignature());
         dto.setStatus(user.getStatus());
-        dto.setMembershipId(user.getMembership() != null ? user.getMembership().getId() : null);
+        dto.setMembership(user.getMembership() != null ? MembershipDTO.toMembershipDTO(user.getMembership()) : null);
         dto.setReferralId(user.getReferralId());
         dto.setClubId(user.getClubId());
         dto.setQrcodeToken(user.getQrcodeToken());

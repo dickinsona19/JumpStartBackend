@@ -24,13 +24,13 @@ public class Client {
     @Column
     private String password;
 
-    @Column
+    @Column(name="created_at")
     private LocalDateTime createdAt;
 
     @Column
     private String status;
 
-    @Column
+    @Column(name="stripe_account_id ")
     private String stripeAccountId;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)

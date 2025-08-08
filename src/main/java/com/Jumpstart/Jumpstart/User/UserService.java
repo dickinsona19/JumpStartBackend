@@ -9,4 +9,5 @@ public interface UserService {
     List<UserDTO> getAllUsers();
     UserDTO updateUser(Integer id, UserDTO userDTO);
     void deleteUser(Integer id);
+    List<UserDTO> getUsersByClubId(String clubId);
 }

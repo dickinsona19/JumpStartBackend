@@ -1,6 +1,7 @@
 package com.Jumpstart.Jumpstart.Membership;
 
 
+import com.Jumpstart.Jumpstart.Promo.Promo;
 import lombok.Data;
 
 @Data
@@ -9,7 +10,9 @@ public class MembershipDTO {
     private String title;
     private String price;
     private String chargeInterval;
-    private Integer promoId; // ID of the Promo
+    private Promo promo; // ID of the Promo
+    private String clubTag;
+
 
     public Integer getId() {
         return id;
@@ -43,11 +46,33 @@ public class MembershipDTO {
         this.chargeInterval = chargeInterval;
     }
 
-    public Integer getPromoId() {
-        return promoId;
+    public Promo getPromo() {
+        return promo;
     }
 
-    public void setPromoId(Integer promoId) {
-        this.promoId = promoId;
+    public void setPromo(Promo promo) {
+        this.promo = promo;
+    }
+
+
+    public static MembershipDTO toMembershipDTO(Membership membership) {
+        MembershipDTO dto = new MembershipDTO();
+        dto.setId(membership.getId());
+        dto.setTitle(membership.getTitle());
+        dto.setPrice(membership.getPrice());
+        dto.setChargeInterval(membership.getChargeInterval());
+        dto.setPromo(membership.getPromo() != null ? membership.getPromo() : null);
+        dto.setClubTag(membership.getClub() != null ? membership.getClub().getClubTag() : null);
+        return dto;
+    }
+
+
+
+    public String getClubTag() {
+        return clubTag;
+    }
+
+    public void setClubTag(String clubTag) {
+        this.clubTag = clubTag;
     }
 }

@@ -4,6 +4,7 @@ package com.Jumpstart.Jumpstart.Club;
 import com.Jumpstart.Jumpstart.Client.Client;
 import com.Jumpstart.Jumpstart.Client.ClientRepository;
 import com.Jumpstart.Jumpstart.Membership.Membership;
+import com.Jumpstart.Jumpstart.Membership.MembershipDTO;
 import com.Jumpstart.Jumpstart.Membership.MembershipRepository;
 import com.Jumpstart.Jumpstart.Staff.Staff;
 import com.Jumpstart.Jumpstart.Staff.StaffRepository;
@@ -47,11 +48,6 @@ public class ClubServiceImpl implements ClubService {
             Staff staff = staffRepository.findById(clubDTO.getStaffId())
                     .orElseThrow(() -> new RuntimeException("Staff not found"));
             club.setStaff(staff);
-        }
-        if (clubDTO.getMembershipId() != null) {
-            Membership membership = membershipRepository.findById(clubDTO.getMembershipId())
-                    .orElseThrow(() -> new RuntimeException("Membership not found"));
-            club.setMembership(membership);
         }
 
         Club savedClub = clubRepository.save(club);
@@ -98,13 +94,6 @@ public class ClubServiceImpl implements ClubService {
         } else {
             club.setStaff(null);
         }
-        if (clubDTO.getMembershipId() != null) {
-            Membership membership = membershipRepository.findById(clubDTO.getMembershipId())
-                    .orElseThrow(() -> new RuntimeException("Membership not found"));
-            club.setMembership(membership);
-        } else {
-            club.setMembership(null);
-        }
 
         Club updatedClub = clubRepository.save(club);
         return mapToDTO(updatedClub);
@@ -126,7 +115,25 @@ public class ClubServiceImpl implements ClubService {
         dto.setClubTag(club.getClubTag());
         dto.setClientId(club.getClient() != null ? club.getClient().getId() : null);
         dto.setStaffId(club.getStaff() != null ? club.getStaff().getId() : null);
-        dto.setMembershipId(club.getMembership() != null ? club.getMembership().getId() : null);
+
+        // Fetch memberships by clubTag
+        List<Membership> memberships = membershipRepository.findByClubClubTag(club.getClubTag());
+        List<MembershipDTO> membershipDTOs = memberships.stream()
+                .map(this::mapMembershipToDTO)
+                .collect(Collectors.toList());
+        dto.setMemberships(membershipDTOs);
+
+        return dto;
+    }
+
+    private MembershipDTO mapMembershipToDTO(Membership membership) {
+        MembershipDTO dto = new MembershipDTO();
+        dto.setId(membership.getId());
+        dto.setTitle(membership.getTitle());
+        dto.setPrice(membership.getPrice());
+        dto.setChargeInterval(membership.getChargeInterval());
+        dto.setPromo(membership.getPromo() != null ? membership.getPromo() : null);
+        dto.setClubTag(membership.getClub().getClubTag());
         return dto;
     }
 }

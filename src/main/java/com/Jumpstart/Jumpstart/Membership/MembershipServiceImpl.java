@@ -2,6 +2,8 @@ package com.Jumpstart.Jumpstart.Membership;
 
 
 
+import com.Jumpstart.Jumpstart.Club.Club;
+import com.Jumpstart.Jumpstart.Club.ClubRepository;
 import com.Jumpstart.Jumpstart.Promo.Promo;
 import com.Jumpstart.Jumpstart.Promo.PromoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,10 @@ public class MembershipServiceImpl implements MembershipService {
     @Autowired
     private PromoRepository promoRepository;
 
+
+    @Autowired
+    private ClubRepository clubRepository;
+
     @Override
     public MembershipDTO createMembership(MembershipDTO membershipDTO) {
         Membership membership = new Membership();
@@ -25,11 +31,19 @@ public class MembershipServiceImpl implements MembershipService {
         membership.setPrice(membershipDTO.getPrice());
         membership.setChargeInterval(membershipDTO.getChargeInterval());
 
-        if (membershipDTO.getPromoId() != null) {
-            Promo promo = promoRepository.findById(membershipDTO.getPromoId())
+        if (membershipDTO.getPromo() != null) {
+            Promo promo = promoRepository.findById(membershipDTO.getPromo().getId())
                     .orElseThrow(() -> new RuntimeException("Promo not found"));
             membership.setPromo(promo);
         }
+        if (membershipDTO.getClubTag() != null) {
+            Club club = clubRepository.findByClubTag(membershipDTO.getClubTag())
+                    .orElseThrow(() -> new RuntimeException("Club not found for clubTag: " + membershipDTO.getClubTag()));
+            membership.setClub(club);
+        } else {
+            throw new IllegalArgumentException("clubTag must not be null");
+        }
+
 
         Membership savedMembership = membershipRepository.save(membership);
         return mapToDTO(savedMembership);
@@ -57,8 +71,8 @@ public class MembershipServiceImpl implements MembershipService {
         membership.setPrice(membershipDTO.getPrice());
         membership.setChargeInterval(membershipDTO.getChargeInterval());
 
-        if (membershipDTO.getPromoId() != null) {
-            Promo promo = promoRepository.findById(membershipDTO.getPromoId())
+        if (membershipDTO.getPromo() != null) {
+            Promo promo = promoRepository.findById(membershipDTO.getPromo().getId())
                     .orElseThrow(() -> new RuntimeException("Promo not found"));
             membership.setPromo(promo);
         } else {
@@ -80,7 +94,8 @@ public class MembershipServiceImpl implements MembershipService {
         dto.setTitle(membership.getTitle());
         dto.setPrice(membership.getPrice());
         dto.setChargeInterval(membership.getChargeInterval());
-        dto.setPromoId(membership.getPromo() != null ? membership.getPromo().getId() : null);
+        dto.setPromo(membership.getPromo() != null ? membership.getPromo() : null);
+        dto.setClubTag(membership.getClub() != null ? membership.getClub().getClubTag() : null);
         return dto;
     }
 

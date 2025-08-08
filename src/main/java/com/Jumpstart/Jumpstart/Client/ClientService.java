@@ -8,5 +8,5 @@ public interface ClientService {
     List<ClientDTO> getAllClients();
     ClientDTO updateClient(Integer id, ClientDTO clientDTO);
     void deleteClient(Integer id);
-    Client getClientWithClubs(Integer id);
+    ClientDTO getClientWithClubs(Integer id);
 }

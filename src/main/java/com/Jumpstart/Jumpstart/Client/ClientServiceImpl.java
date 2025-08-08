@@ -1,5 +1,6 @@
 package com.Jumpstart.Jumpstart.Client;
 
+import com.Jumpstart.Jumpstart.Club.ClubDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,14 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.deleteById(id);
     }
 
+
+
+
+    @Override
+    public ClientDTO getClientWithClubs(Integer id) {
+        return mapToDTO(clientRepository.findByIdWithClubs(id));
+    }
+
     private ClientDTO mapToDTO(Client client) {
         ClientDTO dto = new ClientDTO();
         dto.setId(client.getId());
@@ -63,12 +72,7 @@ public class ClientServiceImpl implements ClientService {
         dto.setCreatedAt(client.getCreatedAt());
         dto.setStatus(client.getStatus());
         dto.setStripeAccountId(client.getStripeAccountId());
+        dto.setClubs(client.getClubs().stream().map(club -> ClubDTO.mapToClubDTO(club)).collect(Collectors.toList()));
         return dto;
-    }
-
-
-    @Override
-    public Client getClientWithClubs(Integer id) {
-        return clientRepository.findByIdWithClubs(id);
     }
 }

@@ -39,4 +39,8 @@ public class UserController {
         return ResponseEntity.ok().build();
 
     }
+    @GetMapping("/club/{clubId}")
+    public ResponseEntity<List<UserDTO>> getUsersByClubId(@PathVariable String clubId) {
+        return ResponseEntity.ok(userService.getUsersByClubId(clubId));
+    }
 }

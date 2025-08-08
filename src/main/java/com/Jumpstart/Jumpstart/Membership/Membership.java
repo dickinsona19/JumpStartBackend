@@ -1,4 +1,5 @@
 package com.Jumpstart.Jumpstart.Membership;
+import com.Jumpstart.Jumpstart.Club.Club;
 import com.Jumpstart.Jumpstart.Promo.Promo;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,12 +20,17 @@ public class Membership {
     @Column
     private String price;
 
-    @Column
+    @Column(name = "charge_interval")
     private String chargeInterval;
 
     @ManyToOne
     @JoinColumn(name = "promo_id")
     private Promo promo;
+
+    @ManyToOne
+    @JoinColumn(name = "club_tag", referencedColumnName = "club_tag")
+        private Club club;
+
 
     public Integer getId() {
         return id;
@@ -59,12 +65,19 @@ public class Membership {
     }
 
 
-
     public Promo getPromo() {
         return promo;
     }
 
     public void setPromo(Promo promo) {
         this.promo = promo;
+    }
+
+    public Club getClub() {
+        return club;
+    }
+
+    public void setClub(Club clubTag) {
+        this.club = clubTag;
     }
 }
